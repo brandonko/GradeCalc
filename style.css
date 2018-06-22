@@ -1,0 +1,35 @@
+/*
+Brandon Ko
+18 June 2018
+CSS Style for the GradeCalc Extension popup
+*/
+html {
+  width: 280px;
+  height: auto;
+}
+head {
+  text-align: center;
+}
+body {
+  background-color: rgb(230,230,250);
+}
+button:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+div {
+  background-color: #fff;
+  text-align: left;
+  margin-top: 25px;
+  padding: 10px;
+  border: 1px solid black;
+}
+.gradeInput {
+  width: 60px;
+}
+.selection {
+  font-weight: normal;
+}
+.box {
+  border: 1px solid black;
+}

@@ -1,0 +1,28 @@
+/*
+Brandon Ko
+17 June 2018
+Manifest for the GradeCalc Chrome Extension
+*/
+
+{
+  "name": "GradeCalc",
+  "version": "1.0",
+  "description": "Provides in-depth grade statistics for UW Canvas",
+  "permissions": ["activeTab", "declarativeContent", "storage", "https://*.google.com/"],
+  //"options_page": "options.html",
+  "background": {
+  	"scripts": ["background.js"],
+  	"persistent": false
+  },
+  "page_action": {
+  	"default_popup": "popup.html",
+  	"default_icon": "images/icon_16.png"
+  },
+  "icons": {
+      "16": "images/icon_16.png",
+      "32": "images/icon_32.png",
+      "48": "images/icon_48.png",
+      "128": "images/icon_128.png"
+	},
+  "manifest_version": 2
+}

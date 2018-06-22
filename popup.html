@@ -1,0 +1,94 @@
+<!--
+Brandon Ko
+18 June 2018
+HTML for the GradeCalc Extension popup
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GradeCalc</title>
+	<h1>GradeCalc</h1>
+	<h6>For canvas.uw.edu only</h6>
+	<link rel="stylesheet" href="style.css">
+	<script src="popup.js"></script>
+</head>
+<body>
+	<div>
+		<h2>Extract Data</h2>
+		<p>Please select one of the two ways of data extraction
+			based on how your grades are calculated by the professor. You must select one before making other calculations (double click the button). <i>Clicking again will reset statistics data.</i></p>
+			<button id="unweightedCalc">Unweighted</button>
+			<button id="weightedCalc">Weighted</button>	
+		</div>
+		<div>
+			<h2 id="statsTitle">Statistics</h2>
+			<table class="gradeDisplay">
+				<tr>
+					<th></th>
+					<th>My Grades:</th>
+					<th>Class Mean:</th>
+				</tr>
+				<tr>
+					<th>Points:</th>
+					<td><a id="acquiredPoints">--</a></td>
+					<td><a id="acquiredPointsMean">--</a></td>
+				</tr>
+				<tr>
+					<th>Percentage:</th>
+					<td><a id="gradePercentage">--</a>%</td>
+					<td><a id="gradePercentageMean">--</a>%</td>
+				</tr>
+			</table>
+			<p><b>Total Points: </b><a id="totalPoints">--</a></p>
+			<p id="errorMessage"></p>
+			<p id="errorMessage2"></p>
+		</div>
+		<div>
+			<h2>Table</h2>
+			<a id="categoricalGrades"></a>
+		</div>
+		<div>
+			<h2>Make an Edit</h2>
+			<p>Select which row and column of the Statistics table you would like to edit and if you wish to add or subtract some specific value to this entry.</p>
+			<form>
+				<table class="selection">
+					<tr>
+						<td><input type="radio" name="editSelection" id="myGradesRadio">My Grades</td>
+						<td><input type="radio" name="editSelection" id="classGradesRadio">Class Grades</td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="editGradeType" id="percentageRadio">Percentage</td>
+						<td><input type="radio" name="editGradeType" id="pointsRadio">Points</td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="editGradeType" id="totalPointsRadio">Total Points</td>
+					</tr>
+					<tr>
+						<td><input type="radio" name="operation" id="addRadio">Add</td>
+						<td><input type="radio" name="operation" id="subtractRadio">Subtract</td>
+					</tr>
+				</table>
+			</form>
+			Value: <input class="gradeInput" type="number" id="gradeEdit">
+			<button id="submitEdit">Submit Changes</button>
+		</div>
+		<div>
+			<h2 id="minScoreTitle">Minimum Score</h2>
+			<p>Enter the amount of points the following assignment or test is worth and the overall grade(%) you would like to receive to determine the minimum score you need on this assignment or test.</p>
+			<table class="selection">
+				<tr>
+					<th>Points:</th>
+					<th><input class="gradeInput" type="number" id="gradeValue"></th>
+				</tr>
+				<tr>
+					<th>Grade:</th>
+					<th><input class="gradeInput" type="number" id="desiredGrade">%</th>
+				</tr>
+			</table>
+			<button id="unweightedMinScore">Submit</button><br>
+			<p>Minimum Score Required: <a id="minScoreRequired">--</a></p>
+			<p>Minimum Grade Required: <a id="minGradeRequired">--</a>%</p>
+		</div>
+	</body>
+	</html>
