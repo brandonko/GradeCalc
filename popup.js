@@ -12,6 +12,7 @@ window.onload = function () {
 	function $cn(id) {return document.getElementsByClassName(id)}
 	function clStr(content) {chrome.tabs.executeScript({code: "cl('" + content + "')"})}
 	function round100(num) {return Math.round(num * 100) / 100}
+
 	var acquiredPoints;
 	var gradePercentage;
 	var acquiredPointsMean;
@@ -41,62 +42,24 @@ window.onload = function () {
 
 		//chrome.tabs.executeScript({file: 'getScoresUnweighted.js'});
 		$('statsTitle').innerHTML = "Statistics (unweighted)";
-		clStr("begin storage.sync.get")
 
-		/*//Personal Statistics
-		chrome.storage.sync.get(['onGradePage', 'totalPoints',
-			'acquiredPoints'], function(e) {
-				clStr("callback personal stats")
-				if (e.onGradePage) {
-					clStr("on grade page")
-					$('errorMessage').innerHTML = "";
-					acquiredPoints = parseFloat(e.acquiredPoints);
-					totalPoints = parseFloat(e.totalPoints.replace(',', ''));
-					gradePercentage = acquiredPoints * 100 / totalPoints;
-					chrome.tabs.executeScript({code: 'cl("totalPoints: " +' + totalPoints + ')'});
-					updateStatistics();
-				} else {
-					clStr("not on grade page")
-					$('errorMessage').innerHTML = "Error: Not on grades page";
-					$('totalPoints').innerHTML = "--";
-					$('acquiredPoints').innerHTML =  "--";
-					$('gradePercentage').innerHTML =  "--";
-				}
-			})
+		chrome.storage.sync.get(['processedStats'], function(e) {
+			createTable();
+			acquiredPoints = 0;
+			totalPoints = 0;
+			acquiredPointsMean = 0;
+			for(var key in e.processedStats) {
+				acquiredPoints += e.processedStats[key].myScore;
+				totalPoints += e.processedStats[key].totalPoints;
+				acquiredPointsMean += e.processedStats[key].mean;
+			}
+			gradePercentage = acquiredPoints/totalPoints * 100;
+			gradePercentageMean = acquiredPointsMean/totalPoints * 100;
+			createTable();
+			updateStatistics();
+		})
 
-		//Class Statistics (Means)
-		chrome.storage.sync.get(['classStatsAvail', 'acquiredPointsMean', 
-			'totalPoints'],
-			function(e) {
-				if(e.classStatsAvail) {
-					$('errorMessage2').innerHTML = "";
-					acquiredPointsMean = Math.round(e.acquiredPointsMean*100)/100;
-					gradePercentageMean = acquiredPointsMean * 100 / totalPoints;
-					updateStatistics();
-				} else {
-					$('errorMessage2').innerHTML = "No class Statistics available";
-					$('acquiredPointsMean').innerHTML = "--";
-					$('gradePercentageMean').innerHTML = "--";
-				}
-				*/
-
-				chrome.storage.sync.get(['processedStats'], function(e) {
-					createTable();
-					acquiredPoints = 0;
-					totalPoints = 0;
-					acquiredPointsMean = 0;
-					for(var key in e.processedStats) {
-						acquiredPoints += e.processedStats[key].myScore;
-						totalPoints += e.processedStats[key].totalPoints;
-						acquiredPointsMean += e.processedStats[key].mean;
-					}
-					gradePercentage = acquiredPoints/totalPoints * 100;
-					gradePercentageMean = acquiredPointsMean/totalPoints * 100;
-					createTable();
-					updateStatistics();
-				})
-				
-			})
+	})
 
 	//Collect data for an weighted course
 	$('weightedCalc').addEventListener('click', function() {
@@ -113,22 +76,64 @@ window.onload = function () {
 			updateStatistics();
 
 			//TODO: add table weight input (with button)
-			var head = document.createElement("TH")
-			var text = document.createTextNode("Weight")
-			head.appendChild(text)
-
-			clStr($('categoricalGrades').getElementById('headerRow').innerHTML)
+			$('weightedPercentages').innerHTML = "";
+			var table = document.createElement("TABLE")
+			var row = document.createElement("TR")
+			var label1 = document.createElement("TH")
+			label1.appendChild(document.createTextNode("Category:"))
+			row.appendChild(label1)
+			var label2 = document.createElement("TH")
+			label2.appendChild(document.createTextNode("Weight:"))
+			row.appendChild(label2)
+			table.appendChild(row)
 
 			for (var key in e.processedStats) {
-				var row = $('categoricalGrades').getElementById(key)
+				var row = document.createElement("TR")
+				var e = document.createElement("TD")
+				var txt = document.createTextNode(key)
+				e.appendChild(txt)
+				row.appendChild(e)
 				var input = document.createElement('INPUT');
+				input.classList.add("gradeInput")
+				input.type = "number"
+				input.id = key
 				row.appendChild(input)
+				var e2 = document.createElement("TD")
+				var txt2 = document.createTextNode("%")
+				e2.appendChild(txt2)
+				row.appendChild(e2)
+				table.appendChild(row)
 			}
-			//TODO: add statistics based on weight input
+			$('weightedPercentages').appendChild(table)
+			var button = document.createElement("BUTTON")
+			button.innerHTML = "Submit Percentages"
+			button.id = "submitWeightedPercentages"
+			$('weightedPercentages').appendChild(button)
+
+			//Calculate grade percentages based on weighted values submitted by user
+			$('submitWeightedPercentages').addEventListener('click', function() {
+				chrome.storage.sync.get(['processedStats'], function(e) {
+					gradePercentage = 0;
+					gradePercentageMean = 0;
+					for (var key in e.processedStats) {
+						var weight = $(key).value/100
+						var myGrade = e.processedStats[key].myScore /
+						e.processedStats[key].totalPoints;
+						var meanGrade = e.processedStats[key].mean /
+						e.processedStats[key].totalPoints;
+
+						gradePercentage += weight * myGrade
+						gradePercentageMean += weight * meanGrade
+					}
+					gradePercentage *= 100
+					gradePercentageMean *= 100
+					updateStatistics();
+				})
+			})
 		})
 	})
 
-	$('submitWeightedPercentages').addEventListener('click', function() {})
+
 
 	//Creates the data table
 	function createTable() {
