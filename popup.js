@@ -61,7 +61,7 @@ window.onload = function () {
 
 	})
 
-	//Collect data for an weighted course
+	//Collect data for an weighted course 
 	$('weightedCalc').addEventListener('click', function() {
 		chrome.storage.sync.get(['processedStats'], function(e) {
 			acquiredPoints = 0;
