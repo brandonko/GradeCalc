@@ -20,7 +20,7 @@ HTML for the GradeCalc Extension popup
 			based on how your grades are calculated by the professor. You must select one before making other calculations. <i>Clicking again will reset statistics data.</i></p>
 			<button id="unweightedCalc">Unweighted</button>
 			<button id="weightedCalc">Weighted</button>
-			<button id="resetStatistics">Reset</button>
+			<button id="resetStatistics">Clear</button>
 			<a id="weightedPercentages"></a>
 		</div>
 		<div>
@@ -55,18 +55,27 @@ HTML for the GradeCalc Extension popup
 			<p>Select which category of grades you would like to edit and enter the value you wish to add or subtract.</p>
 			<form id="editForm">
 			</form>
-				<table>
-					<tr>
-						<td><input type="radio" name="addSubtract" id="add">Add</td>
-						<td><input type="radio" name="addSubtract" id="sub">Subtract</td>
-					</tr>
-					<tr>
-						<td><input type="radio" name="group" id="myGradesRadio">My Grades</td>
-						<td><input type="radio" name="group" id="classMeanRadio">Class Mean</td>
-						<td><input type="radio" name="group" id="totalPointsRadio">Total Points</td>
-					</tr>
-				</table>
-			Value: <input class="gradeInput" type="number" id="gradeEdit">
+			<table>
+				<tr>
+					<th>Category: <select id="editFormSelect"></select></th>
+				</tr>
+				<tr>
+					<th>Operation: <select id="editOperation">
+						<option value="add">Add</option>
+						<option value="subtract">Subtract</option>
+					</select>
+				</tr>
+				<tr>
+					<th>Column: <select id="editGroupSelect">
+						<option value="myScore">My Grades</option>
+						<option value="mean">Class Mean</option>
+						<option value="totalPoints">Total Points</option>
+					</select></th>
+				</tr>
+				<tr>
+					<th>Value: <input class="gradeInput" type="number" id="gradeEdit"></th>
+				</tr>
+			</table>
 			<button id="submitEdit">Submit Changes</button>
 		</div>
 		<div>
@@ -81,13 +90,13 @@ HTML for the GradeCalc Extension popup
 					<th>Grade:</th>
 					<th><input class="gradeInput" type="number" id="desiredGrade">%</th>
 				</tr>
-				<tr>
-					<th>Category:</th>
-				</tr>
 			</table>
-			<table class="selection" id="minScoreTable">
-			</table>
-			<button id="unweightedMinScore">Submit</button><br>
+			<b>Category: </b>
+			<select id="minScoreSelection">
+			</select>
+			<br>
+			<button id="minScoreSubmit">Submit</button>
+			<br>
 			<p>Minimum Score Required: <a id="minScoreRequired">--</a></p>
 			<p>Minimum Grade Required: <a id="minGradeRequired">--</a>%</p>
 		</div>

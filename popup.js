@@ -12,6 +12,8 @@ window.onload = function () {
 	function $cn(id) {return document.getElementsByClassName(id)}
 	function clStr(content) {chrome.tabs.executeScript({
 		code: "cl('" + content + "')"})}
+	function alrt(content) {chrome.tabs.executeScript({
+		code: "alert('" + content + "')"})}
 	function round100(num) {return Math.round(num * 100) / 100}
 
 	var acquiredPoints;
@@ -61,7 +63,7 @@ window.onload = function () {
 	}
 
 	//Resets Popup
-	$('resetStatistics').addEventListener('click', function() {
+	function reset() {
 		acquiredPoints = undefined;
 		gradePercentage = undefined;
 		acquiredPointsMean = undefined;
@@ -71,15 +73,16 @@ window.onload = function () {
 		updateStatistics();
 		$('weightedPercentages').innerHTML = "";
 		$('categoricalGrades').innerHTML = "";
-		$('editForm').innerHTML = "";
-		$('minScoreTable').innerHTML = "";
+		$('editFormSelect').innerHTML = "";
+		$('minScoreSelection').innerHTML = "";
 		$('statsTitle').innerHTML = "Statistics";
 		clStr("Local data has been reset")
-	})
+	}
+	$('resetStatistics').addEventListener('click', function() {reset()})
 
 	//Collect data for an unweighted course
 	$('unweightedCalc').addEventListener('click', function() {
-		$('weightedPercentages').innerHTML = "";
+		reset();
 		$('statsTitle').innerHTML = "Statistics (unweighted)";
 		weighted = false;
 		chrome.storage.sync.get(['processedStats'], function(e) {
@@ -98,10 +101,12 @@ window.onload = function () {
 			updateStatistics();
 			createEditForm();
 		})
+		clStr("Completed Unweighted Data Extraction")
 	})
 
 	//Collect data for an weighted course 
 	$('weightedCalc').addEventListener('click', function() {
+		reset();
 		$('statsTitle').innerHTML = "Statistics (weighted)"
 		weighted = true;
 		chrome.storage.sync.get(['processedStats'], function(e) {
@@ -174,48 +179,30 @@ window.onload = function () {
 					}
 					gradePercentage *= 100
 					gradePercentageMean *= 100
-					clStr(JSON.stringify(weightedGradeValues))
 					updateStatistics();
+					clStr("Weighted Grade Percentages Calculated")
 				})
 			})
 		})
+		clStr("Completed Weighted Data Extraction")
 	})
 
 	//Create form for editing grades and min score calculation
 	function createEditForm() {
-		$('editForm').innerHTML = ""
-		$('minScoreTable').innerHTML = ""
+		$('editFormSelect').innerHTML = ""
 
-		var table = document.createElement("TABLE")
 		for (var key in processedStats) {
-			var row = document.createElement("TR")
-			var e1 = document.createElement("TD")
-			var inp = document.createElement("INPUT")
-			inp.type = "radio"
-			inp.name = "categoryEdit"
-			inp.id = key + "button"
-			e1.appendChild(inp)
-			var e2 = document.createElement("TD")
-			e2.appendChild(document.createTextNode(key))
-			row.appendChild(e1)
-			row.appendChild(e2)
-			table.appendChild(row)
+			var option = document.createElement("OPTION")
+			option.value = key
+			option.appendChild(document.createTextNode(key))
+			$('editFormSelect').appendChild(option)
 		}
-		$('editForm').appendChild(table)
 
 		for (var key in processedStats) {
-			var row = document.createElement("TR")
-			var e1 = document.createElement("TD")
-			var inp = document.createElement("INPUT")
-			inp.type = "radio"
-			inp.name = "categoryEdit"
-			inp.id = key + "minScoreButton"
-			e1.appendChild(inp)
-			var e2 = document.createElement("TD")
-			e2.appendChild(document.createTextNode(key))
-			row.appendChild(e1)
-			row.appendChild(e2)
-			$('minScoreTable').appendChild(row)
+			var option = document.createElement("OPTION")
+			option.value = key
+			option.appendChild(document.createTextNode(key))
+			$('minScoreSelection').appendChild(option)
 		}
 	}
 
@@ -286,26 +273,15 @@ window.onload = function () {
 
 	//Make an edit to Statistics
 	$('submitEdit').addEventListener('click', function() {
-		clStr("begin edit")
-		var category;
+		var category = $('editFormSelect').value;
+		var column = $('editGroupSelect').value;
+		clStr(category)
+		clStr(column)
 		var mod = parseFloat($('gradeEdit').value);
 		if (isNaN(mod)) {
 			mod = 0
 		}
-		var column;
-		if ($('sub').checked) mod = -mod;
-		for (var key in processedStats) {
-			if ($(key + "button").checked) {
-				category = key
-			}
-		}
-		if ($('myGradesRadio').checked) {
-			column = "myScore"
-		} else if ($('classMeanRadio').checked) {
-			column = "mean"
-		} else {
-			column = "totalPoints"
-		}
+		if ($('editOperation').value == 'subtract') mod = -mod;
 		processedStats[category][column] += mod
 
 		var id = category + column + "Table"
@@ -339,22 +315,28 @@ window.onload = function () {
 			gradePercentageMean = acquiredPointsMean/totalPoints * 100;
 		}
 		updateStatistics();
+		clStr("Completed Edit")
 	})
 
-
 	//Calculate minimum score required
-	$('unweightedMinScore').addEventListener('click', function() {
+	$('minScoreSubmit').addEventListener('click', function () {
 		var desiredGrade = $('desiredGrade').value / 100;
 		var gradeValue = parseInt($('gradeValue').value);
 		var minPoints;
-		
 		if (weighted) {
 			for (var key in processedStats) {
 				var category;
-				if ($(key + "minScoreButton").checked) {
+				clStr(key)
+				if ($('minScoreSelection').value == key) {
 					category = key;
+					clStr("selected")
 				} else {
-					desiredGrade -= weightedGradeValues[key].gradePercentage
+					if (weightedGradeValues[key] == undefined) {
+						alrt("need to fill out weight of categories")
+						break;
+					} else {
+						desiredGrade -= weightedGradeValues[key].gradePercentage
+					}
 				}
 			}
 
@@ -363,7 +345,6 @@ window.onload = function () {
 			processedStats[category].myScore
 		} else {
 			var newTotalScore = gradeValue + totalPoints;
-			
 			minPoints = (desiredGrade * 
 				(totalPoints + gradeValue)) - acquiredPoints;
 		}
@@ -383,5 +364,6 @@ window.onload = function () {
 			$('minScoreRequired').innerHTML = minPoints;
 			$('minGradeRequired').innerHTML = minScore;
 		}
+		clStr("Min Score Calculated")
 	})
 }
