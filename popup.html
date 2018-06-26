@@ -8,97 +8,98 @@ HTML for the GradeCalc Extension popup
 <html>
 <head>
 	<title>GradeCalc</title>
-	<h1>GradeCalc</h1>
-	<h6>For canvas.uw.edu only</h6>
-	<link rel="stylesheet" href="style.css">
-	<script src="popup.js"></script>
-</head>
-<body>
-	<div>
-		<h2>Extract Data</h2>
-		<p>Please select one of the two ways of data extraction
-			based on how your grades are calculated by the professor. You must select one before making other calculations. <i>Clicking again will reset statistics data.</i></p>
-			<button id="unweightedCalc">Unweighted</button>
-			<button id="weightedCalc">Weighted</button>
-			<button id="resetStatistics">Clear</button>
-			<a id="weightedPercentages"></a>
-		</div>
+	<img class="headimg" alt="GradeCalc" src="images/icon_128.png">
+	<p style="text-align: center"><i>For canvas.uw.edu only<br>
+		Created by <a href="http://brandonko.github.io" target="blank">Brandon Ko</a></i></p>
+		<link rel="stylesheet" href="style.css">
+		<script src="popup.js"></script>
+	</head>
+	<body>
 		<div>
-			<h2 id="statsTitle">Statistics</h2>
-			<table class="gradeDisplay">
-				<tr>
-					<th></th>
-					<th>My Grades:</th>
-					<th>Class Mean:</th>
-				</tr>
-				<tr>
-					<th>Points:</th>
-					<td><a id="acquiredPoints">--</a></td>
-					<td><a id="acquiredPointsMean">--</a></td>
-				</tr>
-				<tr>
-					<th>Percentage:</th>
-					<td><a id="gradePercentage">--</a>%</td>
-					<td><a id="gradePercentageMean">--</a>%</td>
-				</tr>
-			</table>
-			<p><b>Total Points: </b><a id="totalPoints">--</a></p>
-			<p id="errorMessage"></p>
-			<p id="errorMessage2"></p>
-		</div>
-		<div>
-			<h2>Grade Categories</h2> 
-			<a id="categoricalGrades"></a>
-		</div>
-		<div>
-			<h2>Make an Edit</h2>
-			<p>Select which category of grades you would like to edit and enter the value you wish to add or subtract.</p>
-			<form id="editForm">
-			</form>
-			<table>
-				<tr>
-					<th>Category: <select id="editFormSelect"></select></th>
-				</tr>
-				<tr>
-					<th>Operation: <select id="editOperation">
-						<option value="add">Add</option>
-						<option value="subtract">Subtract</option>
-					</select>
-				</tr>
-				<tr>
-					<th>Column: <select id="editGroupSelect">
-						<option value="myScore">My Grades</option>
-						<option value="mean">Class Mean</option>
-						<option value="totalPoints">Total Points</option>
-					</select></th>
-				</tr>
-				<tr>
-					<th>Value: <input class="gradeInput" type="number" id="gradeEdit"></th>
-				</tr>
-			</table>
-			<button id="submitEdit">Submit Changes</button>
-		</div>
-		<div>
-			<h2 id="minScoreTitle">Minimum Score</h2>
-			<p>Enter the amount of points the following assignment or test is worth and the overall course grade(%) you would like to receive to determine the minimum score you need on this assignment or test.</p>
-			<table class="selection">
-				<tr>
-					<th>Points:</th>
-					<th><input class="gradeInput" type="number" id="gradeValue"></th>
-				</tr>
-				<tr>
-					<th>Grade:</th>
-					<th><input class="gradeInput" type="number" id="desiredGrade">%</th>
-				</tr>
-			</table>
-			<b>Category: </b>
-			<select id="minScoreSelection">
-			</select>
-			<br>
-			<button id="minScoreSubmit">Submit</button>
-			<br>
-			<p>Minimum Score Required: <a id="minScoreRequired">--</a></p>
-			<p>Minimum Grade Required: <a id="minGradeRequired">--</a>%</p>
-		</div>
-	</body>
-	</html>
+			<h2>Extract Data</h2>
+			<p>Please select one of the two ways of data extraction
+				based on how your grades are calculated by the professor. You must select one before making other calculations. <i>Clicking again will reset statistics data.</i></p>
+				<button id="unweightedCalc">Unweighted</button>
+				<button id="weightedCalc">Weighted</button>
+				<button id="resetStatistics">Clear</button>
+				<a id="weightedPercentages"></a>
+			</div>
+			<div>
+				<h2 id="statsTitle">Statistics</h2>
+				<table class="gradeDisplay">
+					<tr>
+						<th></th>
+						<th>My Grades:</th>
+						<th>Class Mean:</th>
+					</tr>
+					<tr>
+						<th>Points:</th>
+						<td><a id="acquiredPoints">--</a></td>
+						<td><a id="acquiredPointsMean">--</a></td>
+					</tr>
+					<tr>
+						<th>Percentage:</th>
+						<td><a id="gradePercentage">--</a>%</td>
+						<td><a id="gradePercentageMean">--</a>%</td>
+					</tr>
+				</table>
+				<p><b>Total Points: </b><a id="totalPoints">--</a></p>
+				<p id="errorMessage"></p>
+				<p id="errorMessage2"></p>
+			</div>
+			<div>
+				<h2>Grade Categories</h2> 
+				<a id="categoricalGrades"></a>
+			</div>
+			<div>
+				<h2>Make an Edit</h2>
+				<p>Select which category of grades you would like to edit and enter the value you wish to add or subtract.</p>
+				<form id="editForm">
+				</form>
+				<table>
+					<tr>
+						<th>Category: <select id="editFormSelect"></select></th>
+					</tr>
+					<tr>
+						<th>Operation: <select id="editOperation">
+							<option value="add">Add</option>
+							<option value="subtract">Subtract</option>
+						</select>
+					</tr>
+					<tr>
+						<th>Column: <select id="editGroupSelect">
+							<option value="myScore">My Grades</option>
+							<option value="mean">Class Mean</option>
+							<option value="totalPoints">Total Points</option>
+						</select></th>
+					</tr>
+					<tr>
+						<th>Value: <input class="gradeInput" type="number" id="gradeEdit"></th>
+					</tr>
+				</table>
+				<button id="submitEdit">Submit Changes</button>
+			</div>
+			<div>
+				<h2 id="minScoreTitle">Minimum Score</h2>
+				<p>Enter the amount of points the following assignment or test is worth and the overall course grade(%) you would like to receive to determine the minimum score you need on this assignment or test.</p>
+				<table class="selection">
+					<tr>
+						<th>Points:</th>
+						<th><input class="gradeInput" type="number" id="gradeValue"></th>
+					</tr>
+					<tr>
+						<th>Grade:</th>
+						<th><input class="gradeInput" type="number" id="desiredGrade">%</th>
+					</tr>
+				</table>
+				<b>Category: </b>
+				<select id="minScoreSelection">
+				</select>
+				<br>
+				<button id="minScoreSubmit">Submit</button>
+				<br>
+				<p>Minimum Score Required: <a id="minScoreRequired">--</a></p>
+				<p>Minimum Grade Required: <a id="minGradeRequired">--</a>%</p>
+			</div>
+		</body>
+		</html>
